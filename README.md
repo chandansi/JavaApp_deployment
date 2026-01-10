@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # JavaLoginShowcase 🚀
 This repository contains a sample login page implemented in Java for practicing Java deployment techniques. It includes a stylish and functional login UI, designed to help you understand how to deploy and manage a Java-based web application. 💻✨
 
@@ -76,3 +77,6 @@ This project is licensed under the Apache License - see the [LICENSE](LICENSE) f
 - **🧩**: Indicates Git.
 - **🤝**: Encourages contributions.
 - **📜**: Represents licensing.
+=======
+# JavaApp_depoyment
+>>>>>>> 2d6b4ea9a844f126be49e1f5a8738b3125c5dbd2
