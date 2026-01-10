@@ -17,8 +17,8 @@ stages:
             versionSpec: '21'
             jdkArchitectureOption: 'x64'
             jdkSourceOption: 'LocalDirectory'
-            jdkFile: '$(Build.SourcesDirectory)/Downloads/jdk-21.zip' # full path to zip
-            jdkDestinationDirectory: '$(Agent.TempDirectory)/jdk-21' # writable folder
+            jdkFile: '$(System.DefaultWorkingDirectory)/Downloads/jdk-21.zip' # full path to zip
+            jdkDestinationDirectory: '$(System.DefaultWorkingDirectory)/jdk-21' # writable folder
             cleanDestinationDirectory: true
         - script: |
             echo "Setting JAVA_HOME..."
