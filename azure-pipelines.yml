@@ -25,18 +25,11 @@ stages:
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
 - stage: 
-  displayName: "deployment"
+  displayName: "BuildArtifact"
   jobs:
-    - job: deployment
+    - job: BuildArtifact
       steps:
-      # - task: TomcatDeployment@1
-      #   inputs:
-      #     TomcatUrl: 'http://localhost:8080'
-      #     Username: 'chandan'
-      #     Password: 'chandan@1234'
-      #     Warfile: 'C:\Agent\_work\3\s\target\JavaLoginShowcase-1.0.0.war'
-      #     Context: '/JavaLoginShowcase'
-      # #     ServerVersion: '7OrAbove'
+
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
@@ -48,3 +41,17 @@ stages:
           downloadType: 'single'
           artifactName: 'java'
           downloadPath: '$(System.DefaultWorkingDirectory)/webapps/'
+
+- stage: 
+  displayName: "Builddeployment"
+  jobs:
+    - job: Builddeployment
+      steps:
+        
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'tomserver'
+          sourceFolder: '$(System.DefaultWorkingDirectory)/webapps/'
+          contents: '**'
+          targetFolder: '/home/adminuser'
+          readyTimeout: '20000'
