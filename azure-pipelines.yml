@@ -1,45 +1,20 @@
 trigger:
-- main   # builds automatically on pushes to main
+- main
 
-pool: pip_agent
-  
+pool:
+  vmImage: pip_agent
 
-variables:
-  MAVEN_HOME: 'C:\maven-mvnd-1.0.3-windows-amd64'  # adjust if needed
+steps:
+- script: |
+    set JAVA_HOME=C:\Program Files\Java\jdk-21.0.9
+    set PATH=%JAVA_HOME%\bin;%PATH%
+    java -version
+  displayName: 'Set Java 21'
 
-stages:
-- stage: Build
-  jobs:
-  - job: BuildJavaApp
-    displayName: "Build Java Login Project"
-    steps:
-
-    # Step 1: Use built-in Java 21
-    - task: JavaToolInstaller@1
-      inputs:
-        versionSpec: '21'
-        jdkArchitectureOption: 'x64'
-        jdkSourceOption: 'PreInstalled'
-
-    # Step 2: Verify Java and Maven
-    - script: |
-        echo "Java version:"
-        java -version
-        echo "MVND version:"
-        $(MAVEN_HOME)\bin\mvnd.cmd -v
-      displayName: "Verify Java & MVND"
-
-    # Step 3: Build project with MVND
-    - script: |
-        echo "Building project..."
-        set PATH=$(MAVEN_HOME)\bin;%PATH%
-        cd $(Build.SourcesDirectory)\JavaLoginPracticeApp
-        mvnd.cmd clean package
-      displayName: "Build with MVND"
-
-    # Step 4: Publish WAR artifact
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)\JavaLoginPracticeApp\target'
-        ArtifactName: 'JavaApp_WAR'
-        publishLocation: 'Container'
+- task: Maven@3
+  displayName: 'Build with Maven'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    javaHomeOption: 'Path'
+    jdkDirectory: 'C:\Program Files\Java\jdk-21.0.9'
