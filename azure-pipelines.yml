@@ -4,23 +4,16 @@ trigger:
 pool:
   name: 'pip_agent'
 
-steps:
-- checkout: self
-
-- powershell: |
-    $env:JAVA_HOME = "C:\Program Files\Java\jdk-21.0.9"
-    $env:PATH = "C:\maven\bin;$env:PATH"
-    mvnd clean package
-  displayName: 'Build WAR'
-
-# - powershell: |
-#     # Stop Tomcat
-#     & "C:\tomcat\bin\shutdown.bat"
-#     Start-Sleep -Seconds 5
-    
-#     # Deploy WAR
-#     Copy-Item target\*.war C:\tomcat\webapps\ -Force
-    
-#     # Start Tomcat
-#     & "C:\tomcat\bin\startup.bat"
-#   displayName: 'Deploy to Tomcat'
+stages:
+- stage: Build
+  displayName: Build WAR
+  jobs:
+  - job: MavenBuild
+    steps:
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'clean package'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        mavenVersionOption: 'Default'
