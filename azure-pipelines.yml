@@ -1,8 +1,7 @@
 trigger:
 - main
 
-pool:
-  name: 'Default'
+pool: pip_agent
 
 steps:
 - checkout: self
