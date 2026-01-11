@@ -42,9 +42,9 @@ stages:
           PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
           ArtifactName: 'java'
           publishLocation: 'Container'
-      # - task: DownloadBuildArtifacts@1
-      #   inputs:
-      #     buildType: 'current'
-      #     downloadType: 'single'
-      #     artifactName: 'java'
-      #     downloadPath: '$(TOMCAT_HOME)/webapps/'
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'java'
+          downloadPath: '$(System.DefaultWorkingDirectory)/webapps/'
