@@ -7,13 +7,13 @@ pool:
 stages:
 
 # -------------------------
-# Stage 1: Build WAR
+# Stage 1: Build and Publish
 # -------------------------
-- stage: Build
-  displayName: 'Build WAR'
+- stage: BuildAndPublish
+  displayName: 'Build and Publish WAR'
   jobs:
   - job: MavenBuild
-    displayName: 'Maven Build Job'
+    displayName: 'Maven Build and Publish Job'
     steps:
     - task: Maven@4
       inputs:
@@ -30,16 +30,6 @@ stages:
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
 
-# -------------------------
-# Stage 2: Publish Artifact
-# -------------------------
-- stage: PublishArtifact
-  displayName: 'Publish WAR Artifact'
-  dependsOn: Build
-  jobs:
-  - job: PublishJob
-    displayName: 'Publish Build Artifact'
-    steps:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
@@ -47,11 +37,11 @@ stages:
         publishLocation: 'Container'
 
 # -------------------------
-# Stage 3: Deploy_via SSH
+# Stage 2: Deploy via SSH
 # -------------------------
 - stage: Deploy
   displayName: 'Deploy WAR to Tomcat'
-  dependsOn: PublishArtifact
+  dependsOn: BuildAndPublish
   jobs:
   - job: SSHDeploy
     displayName: 'Copy WAR to Remote Tomcat'
@@ -61,11 +51,26 @@ stages:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'java'
-        downloadPath: '$(System.DefaultWorkingDirectory)/java_folder'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - powershell: |
+        Write-Host "=== Downloaded artifacts location ==="
+        Get-ChildItem -Path "$(System.ArtifactsDirectory)" -Recurse | Select-Object FullName
+      displayName: 'Debug: List downloaded artifacts'
 
     - task: CopyFilesOverSSH@0
       inputs:
         sshEndpoint: 'tomserver'
-        sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder/java'
+        sourceFolder: '$(System.ArtifactsDirectory)/java'
         contents: '**/*.war'
         targetFolder: '/opt/tomcat/webapps'
+        
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'tomserver'
+        runOptions: 'inline'
+        inline: |
+          /opt/tomcat/bin/shutdown.sh || true
+          sleep 5
+          /opt/tomcat/bin/startup.sh
+      displayName: 'Restart Tomcat'
