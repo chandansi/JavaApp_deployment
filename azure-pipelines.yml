@@ -8,7 +8,7 @@ steps:
   displayName: 'Checkout Code'
 
 - powershell: |
-    $env:JAVA_HOME = "C:\Progra~1\Java\jdk-21.0.9"
+    $env:JAVA_HOME = "C:\Program\Java\jdk-21.0.9"
     $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:JAVA_HOME\bin;$env:PATH"
     
     Write-Host "Java Version:"
@@ -19,8 +19,7 @@ steps:
   displayName: 'Check Tools'
 
 - powershell: |
-    $env:JAVA_HOME = "C:\Progra~1\Java\jdk-21.0.9"
+    $env:JAVA_HOME = "C:\Program\Java\jdk-21.0.9"
     $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:JAVA_HOME\bin;$env:PATH"
     
-    & mvnd clean install
   displayName: 'Maven Build'
