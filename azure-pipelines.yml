@@ -42,16 +42,16 @@ stages:
           artifactName: 'java'
           downloadPath: '$(System.DefaultWorkingDirectory)/webapps/'
 
-# - stage: 
-#   displayName: "Builddeployment"
-#   jobs:
-#     - job: Builddeployment
-#       steps:
+- stage: 
+  displayName: "Builddeployment"
+  jobs:
+    - job: Builddeployment
+      steps:
         
-#       - task: CopyFilesOverSSH@0
-#         inputs:
-#           sshEndpoint: 'tomserver'
-#           sourceFolder: '$(System.DefaultWorkingDirectory)/target'
-#           contents: 'JavaLoginShowcase-1.0.0.war'
-#           targetFolder: '/opt/tomcat/webapps'
-#           readyTimeout: '20000'
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'tomserver'
+          sourceFolder: '$(System.DefaultWorkingDirectory)/webapps'
+          contents: 'JavaLoginShowcase-1.0.0.war'
+          targetFolder: '/opt/tomcat/webapps'
+          readyTimeout: '20000'
