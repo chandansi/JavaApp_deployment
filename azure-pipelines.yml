@@ -5,10 +5,15 @@ pool:
   name: 'pip_agent'
 
 stages:
+
+# -------------------------
+# Stage 1: Build WAR
+# -------------------------
 - stage: Build
-  displayName: Build WAR
+  displayName: 'Build WAR'
   jobs:
   - job: MavenBuild
+    displayName: 'Maven Build Job'
     steps:
     - task: Maven@4
       inputs:
@@ -24,44 +29,46 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-- stage: BuildArtifact
-  displayName: "BuildArtifact"
-  jobs:
-    - job: BuildArtifact
-      steps:
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
-          ArtifactName: 'java'
-          publishLocation: 'Container'
-      - task: DownloadBuildArtifacts@1
-        inputs:
-          buildType: 'current'
-          downloadType: 'single'
-          artifactName: 'java'
-          downloadPath: '$(System.DefaultWorkingDirectory)/java_folder'
-      
-      # - task: PowerShell@2
-      #   inputs:
-      #      targetType: 'inline'
-      #      script: |
-      #         - script: dir $(System.DefaultWorkingDirectory)\java_folder
-      #           displayName: 'Check downloaded artifacts'
-
-- stage: 
-  displayName: "Builddeployment"
-  dependsOn: BuildArtifact
+# -------------------------
+# Stage 2: Publish Artifact
+# -------------------------
+- stage: PublishArtifact
+  displayName: 'Publish WAR Artifact'
+  dependsOn: Build
   jobs:
-    - job: Builddeployment
-      steps:
-        
-      - task: CopyFilesOverSSH@0
-        inputs:
-          sshEndpoint: 'tomserver'
-          sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder'
-          contents: 'JavaLoginShowcase-1.0.0.war'
-          targetFolder: '/opt/tomcat/webapps'
-          cleanTargetFolder: false
-          overwrite: true
-          readyTimeout: '20000'
+  - job: PublishJob
+    displayName: 'Publish Build Artifact'
+    steps:
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
+        ArtifactName: 'java'
+        publishLocation: 'Container'
+
+# -------------------------
+# Stage 3: Deploy via SSH
+# -------------------------
+- stage: Deploy
+  displayName: 'Deploy WAR to Tomcat'
+  dependsOn: PublishArtifact
+  jobs:
+  - job: SSHDeploy
+    displayName: 'Copy WAR to Remote Tomcat'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'java'
+        downloadPath: '$(System.DefaultWorkingDirectory)/java_folder'
+
+    - task: CopyFilesOverSSH@0
+      inputs:
+        sshEndpoint: 'tomserver'                   # Tumhara SSH service connection
+        sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder'
+        contents: 'JavaLoginShowcase-1.0.0.war'   # Tumhara WAR file
+        targetFolder: '/opt/tomcat/webapps'
+        cleanTargetFolder: false
+        overwrite: true
+        readyTimeout: '20000'
