@@ -62,4 +62,6 @@ stages:
           sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder'
           contents: 'JavaLoginShowcase-1.0.0.war'
           targetFolder: '/opt/tomcat/webapps'
+          cleanTargetFolder: false
+          overwrite: true
           readyTimeout: '20000'
