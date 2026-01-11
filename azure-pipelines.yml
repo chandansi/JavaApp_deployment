@@ -29,11 +29,22 @@ stages:
   jobs:
     - job: deploymentontom
       steps:
-      - task: TomcatDeployment@1
+      # - task: TomcatDeployment@1
+      #   inputs:
+      #     TomcatUrl: 'http://localhost:8080'
+      #     Username: 'chandan'
+      #     Password: 'chandan@1234'
+      #     Warfile: 'C:\Agent\_work\3\s\target\JavaLoginShowcase-1.0.0.war'
+      #     Context: '/JavaLoginShowcase'
+      #     ServerVersion: '7OrAbove'
+      - task: PublishBuildArtifacts@1
         inputs:
-          TomcatUrl: 'http://localhost:8080'
-          Username: 'chandan'
-          Password: 'chandan@1234'
-          Warfile: 'C:\Agent\_work\3\s\target\JavaLoginShowcase-1.0.0.war'
-          Context: '/JavaLoginShowcase'
-          ServerVersion: '7OrAbove'
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
+          ArtifactName: 'java'
+          publishLocation: 'Container'
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'java'
+          downloadPath: '$(TOMCAT_HOME)/webapps/'
