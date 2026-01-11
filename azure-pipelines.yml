@@ -51,7 +51,7 @@ stages:
       - task: CopyFilesOverSSH@0
         inputs:
           sshEndpoint: 'tomserver'
-          sourceFolder: '$(System.DefaultWorkingDirectory)/webapps/'
-          contents: '**'
-          targetFolder: '/home/adminuser'
+          sourceFolder: '$(System.DefaultWorkingDirectory)/target'
+          contents: 'JavaLoginShowcase-1.0.0.war'
+          targetFolder: '/opt/tomcat/webapps'
           readyTimeout: '20000'
