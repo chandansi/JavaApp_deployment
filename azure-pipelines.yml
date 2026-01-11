@@ -10,7 +10,7 @@ steps:
 - powershell: |
     $env:JAVA_HOME = "C:\Program Files\Java\jdk-21.0.9"
     $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:PATH"
-    mvn clean package
+    mvnd clean package
   displayName: 'Build WAR'
 
 # - powershell: |
