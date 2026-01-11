@@ -41,6 +41,13 @@ stages:
           downloadType: 'single'
           artifactName: 'java'
           downloadPath: '$(System.DefaultWorkingDirectory)/java_folder'
+      
+      - task: PowerShell@2
+        inputs:
+           targetType: 'inline'
+           script: |
+              - script: dir $(System.DefaultWorkingDirectory)\java_folder
+                displayName: 'Check downloaded artifacts'
 
 - stage: 
   displayName: "Builddeployment"
