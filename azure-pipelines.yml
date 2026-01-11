@@ -14,6 +14,13 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean package'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.8'
-        mavenVersionOption: 'Default'
+        jdkVersionOption: '1.21'
+        mavenVersionOption: 'Path'
+        mavenDirectory: 'C:\maven\'
+        mavenSetM2Home: false
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
