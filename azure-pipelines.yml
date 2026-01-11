@@ -40,7 +40,7 @@ stages:
           buildType: 'current'
           downloadType: 'single'
           artifactName: 'java'
-          downloadPath: '$(System.DefaultWorkingDirectory)/webapps/'
+          downloadPath: '$(System.DefaultWorkingDirectory)/java'
 
 - stage: 
   displayName: "Builddeployment"
@@ -51,7 +51,7 @@ stages:
       - task: CopyFilesOverSSH@0
         inputs:
           sshEndpoint: 'tomserver'
-          sourceFolder: '$(System.DefaultWorkingDirectory)/webapps'
+          sourceFolder: '$(System.DefaultWorkingDirectory)/java'
           contents: 'JavaLoginShowcase-1.0.0.war'
           targetFolder: '/opt/tomcat/webapps'
           readyTimeout: '20000'
