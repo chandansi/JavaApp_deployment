@@ -1,25 +1,26 @@
 trigger:
 - main
 
-pool: pip_agent
+pool:
+  name: 'pip_agent'
 
 steps:
 - checkout: self
-  displayName: 'Checkout Code'
 
 - powershell: |
     $env:JAVA_HOME = "C:\Program Files\Java\jdk-21.0.9"
-    $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:JAVA_HOME\bin;$env:PATH"
-    
-    Write-Host "Java Version:"
-    & java -version
-    
-    Write-Host "`nMaven Version:"
-    & mvnd -version
-  displayName: 'Check Tools'
+    $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:PATH"
+    mvn clean package
+  displayName: 'Build WAR'
 
-- powershell: |
-    $env:JAVA_HOME = "C:\Program\Java\jdk-21.0.9"
-    $env:PATH = "C:\maven-mvnd-1.0.3-windows-amd64\bin;$env:JAVA_HOME\bin;$env:PATH"
+# - powershell: |
+#     # Stop Tomcat
+#     & "C:\tomcat\bin\shutdown.bat"
+#     Start-Sleep -Seconds 5
     
-  displayName: 'Maven Build'
+#     # Deploy WAR
+#     Copy-Item target\*.war C:\tomcat\webapps\ -Force
+    
+#     # Start Tomcat
+#     & "C:\tomcat\bin\startup.bat"
+#   displayName: 'Deploy to Tomcat'
