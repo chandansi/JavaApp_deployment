@@ -24,11 +24,11 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-- stage: 
-  displayName: "deployment"
-  jobs:
-    - job: deploymentontom
-      steps:
+# - stage: 
+#   displayName: "deployment"
+#   jobs:
+#     - job: deployment
+#       steps:
       # - task: TomcatDeployment@1
       #   inputs:
       #     TomcatUrl: 'http://localhost:8080'
@@ -36,15 +36,15 @@ stages:
       #     Password: 'chandan@1234'
       #     Warfile: 'C:\Agent\_work\3\s\target\JavaLoginShowcase-1.0.0.war'
       #     Context: '/JavaLoginShowcase'
-      #     ServerVersion: '7OrAbove'
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
-          ArtifactName: 'java'
-          publishLocation: 'Container'
-      - task: DownloadBuildArtifacts@1
-        inputs:
-          buildType: 'current'
-          downloadType: 'single'
-          artifactName: 'java'
-          downloadPath: '$(TOMCAT_HOME)/webapps/'
+      # #     ServerVersion: '7OrAbove'
+      # - task: PublishBuildArtifacts@1
+      #   inputs:
+      #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
+      #     ArtifactName: 'java'
+      #     publishLocation: 'Container'
+      # - task: DownloadBuildArtifacts@1
+      #   inputs:
+      #     buildType: 'current'
+      #     downloadType: 'single'
+      #     artifactName: 'java'
+      #     downloadPath: '$(TOMCAT_HOME)/webapps/'
