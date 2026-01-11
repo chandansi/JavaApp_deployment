@@ -17,7 +17,7 @@ steps:
     set PATH=%JAVA_HOME%\bin;C:\maven-mvnd-1.0.3-windows-amd64\bin;%PATH%
     
     java -version
-    mvn -version
+    mvnd -version
   displayName: 'Check Tools'
 
 - script: mvn clean install
