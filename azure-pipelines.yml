@@ -65,10 +65,8 @@ stages:
 
     - task: CopyFilesOverSSH@0
       inputs:
-        sshEndpoint: 'tomserver'                   # Tumhara SSH service connection
-        sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder'
-        contents: 'JavaLoginShowcase-1.0.0.war'   # Tumhara WAR file
+        sshEndpoint: 'tomserver'
+        sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder/java/JavaLoginShowcase-1.0.0'
+        contents: '*.war'
         targetFolder: '/opt/tomcat/webapps'
-        cleanTargetFolder: false
-        overwrite: true
-        readyTimeout: '20000'
+
