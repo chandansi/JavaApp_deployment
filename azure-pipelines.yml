@@ -24,7 +24,7 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-- stage: 
+- stage: BuildArtifact
   displayName: "BuildArtifact"
   jobs:
     - job: BuildArtifact
@@ -40,18 +40,19 @@ stages:
           buildType: 'current'
           downloadType: 'single'
           artifactName: 'java'
-          downloadPath: '$(System.DefaultWorkingDirectory)/java'
+          downloadPath: '$(System.DefaultWorkingDirectory)/java_folder'
 
-# - stage: 
-#   displayName: "Builddeployment"
-#   jobs:
-#     - job: Builddeployment
-#       steps:
+- stage: 
+  displayName: "Builddeployment"
+  dependsOn: BuildArtifact
+  jobs:
+    - job: Builddeployment
+      steps:
         
-#       - task: CopyFilesOverSSH@0
-#         inputs:
-#           sshEndpoint: 'tomserver'
-#           sourceFolder: '$(System.DefaultWorkingDirectory)/java'
-#           contents: 'JavaLoginShowcase-1.0.0.war'
-#           targetFolder: '/opt/tomcat/webapps'
-#           readyTimeout: '20000'
+      - task: CopyFilesOverSSH@0
+        inputs:
+          sshEndpoint: 'tomserver'
+          sourceFolder: '$(System.DefaultWorkingDirectory)/java_folder'
+          contents: 'JavaLoginShowcase-1.0.0.war'
+          targetFolder: '/opt/tomcat/webapps'
+          readyTimeout: '20000'
