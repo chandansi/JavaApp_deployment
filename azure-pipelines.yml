@@ -24,3 +24,16 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
+- stage: 
+  displayName: "deployment"
+  jobs:
+    - job: deploymentontom
+      steps:
+      - task: TomcatDeployment@1
+        inputs:
+          TomcatUrl: 'http://localhost:8080'
+          Username: 'chandan'
+          Password: 'chandan@1234'
+          Warfile: 'C:\Agent\_work\3\s\target\JavaLoginShowcase-1.0.0.war'
+          Context: '/JavaLoginShowcase'
+          ServerVersion: '7OrAbove'
