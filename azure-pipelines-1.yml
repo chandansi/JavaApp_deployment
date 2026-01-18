@@ -18,7 +18,7 @@ stages:
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
-  - stage: deploy-vm
+  - stage: deployvm
     jobs:
     - deployment: DeployWeb
       displayName: deploy Web App
@@ -34,4 +34,9 @@ stages:
               inputs:
                 buildType: 'current'
                 artifactName: 'javafrontend'
-                targetPath: '$(Pipeline.Workspace)/target'
+                targetPath: '$(Pipeline.Workspace)'
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
+              
