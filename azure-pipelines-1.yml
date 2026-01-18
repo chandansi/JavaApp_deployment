@@ -13,7 +13,7 @@ stages:
         steps:
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: '$(System.DefaultWorkingDirectory)/target/JavaLoginShowcase-1.0.0.war'
+            PathtoPublish: '$(System.ArtifactsDirectory)/target/JavaLoginShowcase-1.0.0.war'
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
