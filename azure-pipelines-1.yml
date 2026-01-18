@@ -24,7 +24,7 @@ stages:
       displayName: deploy Web App
       environment:
         name: 'javafrontend-vm'
-        resourceName: myVM
+        # resourceName: myVM
         resourceType: virtualMachine
       strategy:
         runOnce:
