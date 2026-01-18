@@ -18,19 +18,20 @@ stages:
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
-  - stage: deploy
+  - stage: deploy-vm
     jobs:
     - deployment: DeployWeb
-        displayName: deploy Web App
-            pool:
-            vmImage: 'Ubuntu-latest'
-            # creates an environment if it doesn't exist
-        environment: 
-        name: 'smarthotel-dev'
+      displayName: deploy Web App
+      environment:
+        name: 'javafrontend-vm'
         resourceName: myVM
         resourceType: virtualMachine
-        strategy:
+      strategy:
         runOnce:
-            deploy:
+          deploy:
             steps:
-            - script: echo Hello world
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'javafrontend'
+                targetPath: '$(Pipeline.Workspace)/target'
