@@ -2,8 +2,7 @@
 trigger:
 - feature
 
-pool:
-  vmImage: ubuntu-latest
+pool: pip_agent
 
 stages: 
 
