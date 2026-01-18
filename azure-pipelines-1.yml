@@ -1,0 +1,41 @@
+
+trigger:
+- feature
+
+pool: pip_agent
+
+stages: 
+
+  - stage: publishArtifact
+    displayName: "publish Artifact"
+    jobs: 
+      - job: "Artifact"
+        steps:
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(System.ArtifactsDirectory)/target'
+            ArtifactName: 'javafrontend'
+            publishLocation: 'Container'
+
+  - stage: deployvm
+    jobs:
+    - deployment: DeployWeb
+      displayName: deploy Web App
+      environment:
+        name: 'javafrontend-vm'
+        # resourceName: myVM
+        resourceType: virtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'javafrontend'
+                targetPath: '$(Pipeline.Workspace)'
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
+              
