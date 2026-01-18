@@ -13,7 +13,7 @@ stages:
         steps:
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/target'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/target/*'
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
