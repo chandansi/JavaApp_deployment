@@ -28,25 +28,25 @@ stages:
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
-  # - stage: deployvm
-  #   jobs:
-  #   - deployment: DeployWeb
-  #     displayName: deploy Web App
-  #     environment:
-  #       name: 'javafrontend-vm'
-  #       # resourceName: myVM
-  #       resourceType: virtualMachine
-  #     strategy:
-  #       runOnce:
-  #         deploy:
-  #           steps:
-  #           - task: DownloadPipelineArtifact@2
-  #             inputs:
-  #               buildType: 'current'
-  #               artifactName: 'javafrontend'
-  #               targetPath: '$(Pipeline.Workspace)'
-  #           - task: Bash@3
-  #             inputs:
-  #               targetType: 'inline'
-  #               script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
+  - stage: deployvm
+    jobs:
+    - deployment: DeployWeb
+      displayName: deploy Web App
+      environment:
+        name: 'javafrontend-vm'
+        # resourceName: myVM
+        resourceType: virtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'javafrontend'
+                targetPath: '$(Pipeline.Workspace)'
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
               
