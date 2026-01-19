@@ -16,36 +16,36 @@ stages:
             goals: 'clean package'
             publishJUnitResults: true
 
-  - stage: publishArtifact
-    displayName: "Publish Artifact"
-    jobs: 
-      - job: PublishArtifact
-        steps:
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(System.ArtifactsDirectory)/target'
-            ArtifactName: 'javafrontend'
-            publishLocation: 'Container'
+  # - stage: publishArtifact
+  #   displayName: "Publish Artifact"
+  #   jobs: 
+  #     - job: PublishArtifact
+  #       steps:
+  #       - task: PublishBuildArtifacts@1
+  #         inputs:
+  #           PathtoPublish: '$(System.ArtifactsDirectory)/target/JavaLoginShowcase-1.0.0.war'
+  #           ArtifactName: 'javafrontend'
+  #           publishLocation: 'Container'
 
-  - stage: deployvm
-    jobs:
-    - deployment: DeployWeb
-      displayName: deploy Web App
-      environment:
-        name: 'javafrontend-vm'
-        # resourceName: myVM
-        resourceType: virtualMachine
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                buildType: 'current'
-                artifactName: 'javafrontend'
-                targetPath: '$(Pipeline.Workspace)'
-            - task: Bash@3
-              inputs:
-                targetType: 'inline'
-                script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
+  # - stage: deployvm
+  #   jobs:
+  #   - deployment: DeployWeb
+  #     displayName: deploy Web App
+  #     environment:
+  #       name: 'javafrontend-vm'
+  #       # resourceName: myVM
+  #       resourceType: virtualMachine
+  #     strategy:
+  #       runOnce:
+  #         deploy:
+  #           steps:
+  #           - task: DownloadPipelineArtifact@2
+  #             inputs:
+  #               buildType: 'current'
+  #               artifactName: 'javafrontend'
+  #               targetPath: '$(Pipeline.Workspace)'
+  #           - task: Bash@3
+  #             inputs:
+  #               targetType: 'inline'
+  #               script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
               
