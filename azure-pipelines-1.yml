@@ -5,7 +5,7 @@ trigger:
 pool: pip_agent
 
 stages: 
-  - stage:
+  - stage: BuildArtifact
     displayName: Build artifact
     jobs:
       - job: BuildArtifact
@@ -18,6 +18,7 @@ stages:
 
   - stage: publishArtifact
     displayName: "Publish Artifact"
+    dependsOn: BuildArtifact
     jobs: 
       - job: PublishArtifact
         steps:
