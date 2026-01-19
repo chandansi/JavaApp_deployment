@@ -28,7 +28,7 @@ stages:
             ArtifactName: 'javafrontend'
             publishLocation: 'Container'
 
-  - stage: deployvm
+  - stage: DeploytoVM
     jobs:
     - deployment: DeployWeb
       displayName: deploy Web App
