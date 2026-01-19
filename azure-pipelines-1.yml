@@ -16,12 +16,12 @@ stages:
             goals: 'clean package'
             publishJUnitResults: true
 
-  - stage: publishArtifact
-    displayName: "Publish Artifact"
-    dependsOn: BuildArtifact
-    jobs: 
-      - job: PublishArtifact
-        steps:
+  # - stage: publishArtifact
+  #   displayName: "Publish Artifact"
+  #   dependsOn: BuildArtifact
+  #   jobs: 
+  #     - job: PublishArtifact
+        # steps:
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(Build.SourcesDirectory)/target/JavaLoginShowcase-1.0.0.war'
