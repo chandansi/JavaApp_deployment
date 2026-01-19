@@ -5,11 +5,21 @@ trigger:
 pool: pip_agent
 
 stages: 
+  - stage:
+    displayName: Build artifact
+    jobs:
+      - job: BuildArtifact
+        steps:
+        - task: Maven@4
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: 'clean package'
+            publishJUnitResults: true
 
   - stage: publishArtifact
-    displayName: "publish Artifact"
+    displayName: "Publish Artifact"
     jobs: 
-      - job: "Artifact"
+      - job: PublishArtifact
         steps:
         - task: PublishBuildArtifacts@1
           inputs:
