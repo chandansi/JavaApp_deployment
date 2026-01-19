@@ -16,16 +16,16 @@ stages:
             goals: 'clean package'
             publishJUnitResults: true
 
-  # - stage: publishArtifact
-  #   displayName: "Publish Artifact"
-  #   jobs: 
-  #     - job: PublishArtifact
-  #       steps:
-  #       - task: PublishBuildArtifacts@1
-  #         inputs:
-  #           PathtoPublish: '$(System.ArtifactsDirectory)/target/JavaLoginShowcase-1.0.0.war'
-  #           ArtifactName: 'javafrontend'
-  #           publishLocation: 'Container'
+  - stage: publishArtifact
+    displayName: "Publish Artifact"
+    jobs: 
+      - job: PublishArtifact
+        steps:
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(System.ArtifactsDirectory)/target/JavaLoginShowcase-1.0.0.war'
+            ArtifactName: 'javafrontend'
+            publishLocation: 'Container'
 
   # - stage: deployvm
   #   jobs:
