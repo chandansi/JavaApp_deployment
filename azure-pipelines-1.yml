@@ -1,0 +1,52 @@
+
+trigger:
+- feature
+
+pool: pip_agent
+
+stages: 
+  - stage: BuildArtifact
+    displayName: Build artifact
+    jobs:
+      - job: BuildArtifact
+        steps:
+        - task: Maven@4
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: 'clean package'
+            publishJUnitResults: true
+
+  # - stage: publishArtifact
+  #   displayName: "Publish Artifact"
+  #   dependsOn: BuildArtifact
+  #   jobs: 
+  #     - job: PublishArtifact
+        # steps:
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.SourcesDirectory)/target/JavaLoginShowcase-1.0.0.war'
+            ArtifactName: 'javafrontend'
+            publishLocation: 'Container'
+
+  - stage: DeploytoVM
+    jobs:
+    - deployment: DeployWeb
+      displayName: deploy Web App
+      environment:
+        name: 'javafrontend-vm'
+        # resourceName: myVM
+        resourceType: virtualMachine
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'javafrontend'
+                targetPath: '$(Pipeline.Workspace)'
+            - task: Bash@3
+              inputs:
+                targetType: 'inline'
+                script: 'sudo cp -r $(Pipeline.Workspace)/*  /var/lib/tomcat9/webapps/'
+              
